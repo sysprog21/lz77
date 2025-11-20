@@ -1,0 +1,10 @@
+# Build artifacts
+*.o
+*.d
+tests/driver
+tests/api
+tools/mzip
+tools/munzip
+
+# Downloaded test datasets (use 'make dataset' to download)
+tests/dataset/
