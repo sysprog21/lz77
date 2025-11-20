@@ -7,11 +7,19 @@
 
 #include "lz77.h"
 
+/* Compression block size (128 KiB).
+ * Trade-off:
+ * - Larger blocks → better compression (more match opportunities)
+ * - Smaller blocks → less memory, faster random access
+ *
+ * 128 KiB is chosen: Balances memory usage with compression efficiency, aligns
+ * with typical L2 cache sizes, reduces I/O syscall overhead.
+ */
 #define BLOCK_SIZE (2 * 64 * 1024)
 
 /* Resource limits to prevent zip-bomb attacks */
-#define MAX_COMPRESSED_CHUNK (8 * 1024 * 1024)    /* 8 MB */
-#define MAX_DECOMPRESSED_CHUNK (16 * 1024 * 1024) /* 16 MB */
+#define MAX_COMPRESSED_CHUNK (8 * 1024 * 1024)    /* 8 MiB */
+#define MAX_DECOMPRESSED_CHUNK (16 * 1024 * 1024) /* 16 MiB */
 
 /* Named constants for magic numbers and chunk types */
 #define MZIP_MAGIC_SIZE 8
@@ -21,8 +29,9 @@
 #define MZIP_FILEINFO_FIXED_SIZE 10
 
 /* magic identifier for mzip file */
-static const uint8_t mzip_magic[MZIP_MAGIC_SIZE] = {'$', 'm', 'z', 'i',
-                                                    'p', '$', '$', '$'};
+static const uint8_t mzip_magic[MZIP_MAGIC_SIZE] = {
+    '$', 'm', 'z', 'i', 'p', '$', '$', '$',
+};
 
 static void write_magic(FILE *file)
 {

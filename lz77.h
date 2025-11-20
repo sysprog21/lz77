@@ -9,7 +9,7 @@
  * - Zero dependencies beyond standard library
  * - Caller-provided buffers (no hidden allocations)
  * - Fast decompression suitable for embedded systems
- * - Predictable memory usage (32KB workspace)
+ * - Predictable memory usage (32 KiB workspace)
  * - Cache-friendly hash table design
  *
  * Usage Example:
@@ -47,7 +47,8 @@
 #define COMPRESS_OVERHEAD 128 /* Safety margin for worst-case compression */
 
 /* Workspace requirements */
-#define LZ77_WORKMEM_SIZE (HASH_SIZE * sizeof(uint32_t)) /* 32KB workspace */
+/* 32 KiB workspace */
+#define LZ77_WORKMEM_SIZE (HASH_SIZE * sizeof(uint32_t))
 
 #if defined(__clang__) || defined(__GNUC__)
 #define LZ77_LIKELY(x) __builtin_expect(!!(x), 1)
