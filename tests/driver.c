@@ -138,13 +138,13 @@ int main(int argc, char **argv)
     printf("Test round-trip for lz77\n\n");
     for (int i = 0; i < count; ++i) {
         const char *name = names[i];
-        char *filename = malloc(strlen(prefix) + strlen(name) + 1);
+        size_t filename_len = strlen(prefix) + strlen(name) + 1;
+        char *filename = malloc(filename_len);
         if (!filename) {
             printf("Error: cannot allocate filename for %s\n", name);
             continue;
         }
-        strcpy(filename, prefix);
-        strcat(filename, name);
+        snprintf(filename, filename_len, "%s%s", prefix, name);
         test_roundtrip_lz77(name, filename);
         free(filename);
     }
