@@ -57,7 +57,8 @@ Compresses data using LZ77 algorithm.
 - `workmem`: 32KB workspace (use `LZ77_WORKMEM_SIZE`)
 - Returns: Compressed size in bytes
 
-Note: To avoid buffer overflow, ensure `out` buffer size ≥ `length + length/32 + 128` bytes. In worst case (incompressible data), output may be slightly larger than input.
+Note: To avoid buffer overflow, ensure `out` buffer size ≥ `length + length/32 + 128` bytes.
+In worst case (incompressible data), output may be slightly larger than input.
 
 ```c
 int lz77_decompress(const void *in, int length, void *out, int max_out);
@@ -75,6 +76,16 @@ Decompresses LZ77-compressed data.
 |-----------|-----------|-------|
 | Compression | 32KB | Caller provides via `workmem` parameter |
 | Decompression | 0 bytes | Zero workspace required |
+
+### Limitations
+
+| Constraint | Value | Rationale |
+|-----------|-------|-----------|
+| Maximum input size | ~4 GiB | Hash table uses uint32_t for position storage |
+
+**Note**: Files larger than 4 GiB may cause integer overflow in position tracking, leading to compression failure.
+This constraint is inherent to the 32KB memory design (8192 × uint32_t hash table).
+For practical embedded systems use cases, this limit is acceptable.
 
 ### Algorithm Parameters
 

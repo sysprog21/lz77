@@ -12,6 +12,11 @@
  * - Predictable memory usage (32 KiB workspace)
  * - Cache-friendly hash table design
  *
+ * Constraints:
+ * - Maximum input size: ~4 GiB (limited by uint32_t position storage)
+ * - Files larger than 4 GiB may cause position wraparound and compression
+ *   failure
+ *
  * Usage Example:
  * @code
  *   #include <stdlib.h>
@@ -49,6 +54,14 @@
 /* Workspace requirements */
 /* 32 KiB workspace */
 #define LZ77_WORKMEM_SIZE (HASH_SIZE * sizeof(uint32_t))
+
+/* Compile-time constraint validation */
+/* Position storage uses uint32_t, limiting input size to ~4 GiB */
+/* This assertion ensures the hash table design is consistent with this limit */
+#if defined(__STDC_VERSION__) && __STDC_VERSION__ >= 201112L
+_Static_assert(sizeof(uint32_t) == 4,
+               "Position storage requires 32-bit integers for 4 GiB limit");
+#endif
 
 #if defined(__clang__) || defined(__GNUC__)
 #define LZ77_LIKELY(x) __builtin_expect(!!(x), 1)
