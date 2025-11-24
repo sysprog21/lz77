@@ -6,5 +6,11 @@ tests/api
 tools/mzip
 tools/munzip
 
+# Fuzzing artifacts
+tests/fuzz
+tests/fuzz_standalone
+tests/corpus/
+*.dSYM/
+
 # Downloaded test datasets (use 'make dataset' to download)
 tests/dataset/

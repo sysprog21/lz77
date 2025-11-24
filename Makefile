@@ -4,6 +4,9 @@ include mk/common.mk
 
 all: tools tests
 
+# Include fuzz.mk after 'all' to keep 'all' as the default target
+include mk/fuzz.mk
+
 tools:
 	$(VECHO) "Building tools...\n"
 	$(Q)$(MAKE) -C tools

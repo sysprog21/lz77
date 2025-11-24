@@ -1,0 +1,87 @@
+# LZ77 fuzzer dictionary
+
+# === Literal tokens ===
+lit_1="\x00A"
+lit_4="\x03AAAA"
+lit_8="\x07ABCDEFGH"
+lit_32="\x1fAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+lit_zeros_8="\x07\x00\x00\x00\x00\x00\x00\x00\x00"
+
+# === Match tokens (len_field 1-6) ===
+match_len3_d1="\x20\x01"
+match_len4_d1="\x40\x01"
+match_len5_d1="\x60\x01"
+match_len6_d1="\x80\x01"
+match_len7_d1="\xa0\x01"
+match_len8_d1="\xc0\x01"
+match_len8_d255="\xc0\xff"
+match_len8_d256="\xc1\x00"
+match_len8_dmax="\xdf\xff"
+max_dist_match_short="\x40\x00\x1f"
+max_dist_match_long="\xe0\x00\x1f"
+
+# === Extended length tokens (len_field=7) ===
+ext_el0_d1="\xe0\x00\x01"
+ext_el127_d1="\xe0\x7f\x01"
+ext_el254_d1="\xe0\xfe\x01"
+ext_el255_d1="\xe0\xff\x01"
+ext_el0_dmax="\xff\x00\xff"
+
+# === Distance edge cases ===
+dist_256_short="\x21\x00"
+dist_256_ext="\xe1\x00\x00"
+dist_max_short="\x3f\xff"
+dist_max_ext="\xff\xff\xff"
+
+# === Invalid/truncated patterns ===
+dist_zero="\x20\x00"
+trunc_ext="\xe0"
+trunc_ext2="\xe0\xff"
+trunc_len6="\xe0"
+trunc_len6_ext="\xe0\xff"
+trunc_literal="\x1f"
+trunc_lit="\x00"
+trunc_match="\x40"
+all_ones="\xff\xff\xff\xff"
+all_zeros="\x00\x00\x00\x00"
+rle_ctrl="\x20\x00\x01"
+
+# === Valid sequences (literal + match) ===
+lit_match="\x00A\x40\x01"
+lit_rle="\x00A\x20\x01"
+lit_ext="\x00A\xe0\x00\x01"
+lit4_match="\x03ABCD\x40\x01"
+match_lit="\x40\x01\x00A"
+rle_chain="\x20\x01\x20\x01\x20\x01"
+
+# === Max distance with valid prefix ===
+lit32_dmax="\x1fAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\x3f\xff"
+lit8_d256="\x07AAAAAAAA\x21\x00"
+
+# === Overlapping copy (distance < length) ===
+overlap_d2="\x40\x02"
+overlap_d3="\x60\x03"
+overlap_d4="\x60\x04"
+overlap_d8="\x60\x08"
+overlap_long="\xe0\xff\x01"
+
+# === Compression input patterns ===
+repeat_a="AAAA"
+repeat_ab="ABAB"
+repeat_abc="ABCABC"
+hash_3byte="ABCABCABC"
+min_data="0123456789ABC"
+repeat_zero="\x00\x00"
+
+# === Literal split boundary ===
+lit_split="\x1fAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\x1fBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
+
+# === Output overflow triggers ===
+overflow_match="\xe0\xf0\x01"
+
+# === ip_bound check triggers ===
+ipbound_len6="\xc0\x01"
+ipbound_ext="\xe0\xff"
+
+# === Reference validation ===
+invalid_ref="\x00A\xff\xff"
